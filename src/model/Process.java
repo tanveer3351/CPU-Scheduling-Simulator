@@ -1,12 +1,12 @@
 package model;
-
 public class Process {
 
     // Process information
-    private String processId;
-    private int arrivalTime;
-    private int burstTime;
-    private int priority;
+    private final String processId;
+    private final int arrivalTime;
+    private final int burstTime;
+    private final int priority;
+
 
     // Constructor
     public Process(String processId,
