@@ -97,7 +97,7 @@ CPU-Scheduling-Simulator/
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/CPU-Scheduling-Simulator.git
+git clone https://github.com/tanveer3351/CPU-Scheduling-Simulator.git
 cd CPU-Scheduling-Simulator
 ```
 
