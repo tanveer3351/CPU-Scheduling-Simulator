@@ -17,8 +17,8 @@ public class RoundRobinTest {
         // processes.add(new Process("P2", 1, 4, 1));
         // processes.add(new Process("P3", 2, 2, 2));
         // int timeQuantum = 2;
-        processes.add(new Process("P1", 2, 3, 2));
-        processes.add(new Process("P2", 8, 2, 1));
+        processes.add(new Process("P1", 0, 5, 2));
+        // processes.add(new Process("P2", 8, 2, 1));
 
         int timeQuantum = 2;
 
