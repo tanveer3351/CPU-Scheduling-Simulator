@@ -1,182 +1,177 @@
 # CPU Scheduling Simulator
 
-A Java-based CPU Scheduling Simulator designed to demonstrate and compare different CPU scheduling algorithms. The project aims to provide an interactive graphical interface, process execution visualization, Gantt charts, and scheduling performance metrics.
+A Java-based CPU Scheduling Simulator with a graphical user interface (GUI). This project demonstrates how different CPU scheduling algorithms manage process execution and calculate scheduling performance metrics.
 
-## Project Overview
+## Features
 
-CPU scheduling is an important function of an operating system. It determines which process gets access to the CPU and in what order.
-
-This project simulates different CPU scheduling algorithms to help students understand how processes are scheduled and how scheduling decisions affect waiting time, turnaround time, and CPU performance.
-
-## Objectives
-
-- Understand and implement different CPU scheduling algorithms.
-- Simulate process execution using arrival and burst times.
-- Calculate important CPU scheduling metrics.
-- Visualize process execution through Gantt charts.
-- Compare the performance of different scheduling algorithms.
-- Develop a user-friendly desktop application using Java Swing.
-
-## Technologies Used
-
-| Technology | Purpose |
-|---|---|
-| Java | Core programming language |
-| Java Swing | Graphical user interface |
-| VS Code | Development environment |
-| Git | Version control |
-| GitHub | Source code management and collaboration |
+- Add, edit, and delete processes.
+- Clear individual input fields or remove all processes.
+- Select and execute different CPU scheduling algorithms.
+- Configure the time quantum for Round Robin scheduling.
+- Display process scheduling results in a table.
+- Calculate average Waiting Time, Turnaround Time, and Response Time.
+- Visualize process execution through a Gantt Chart.
+- Display CPU idle periods in the Gantt Chart.
+- Validate process inputs and handle invalid values.
 
 ## Scheduling Algorithms
 
-The project aims to implement the following five CPU scheduling algorithms:
+The simulator implements five CPU scheduling algorithms:
 
-| Algorithm | Type | Status |
+| Algorithm | Type | Description |
 |---|---|---|
-| First Come First Served (FCFS) | Non-Preemptive | Completed and tested |
-| Shortest Job First (SJF) | Non-Preemptive | In Progress |
-| Shortest Remaining Time First (SRTF) | Preemptive | Planned |
-| Priority Scheduling | Non-Preemptive | Planned |
-| Round Robin (RR) | Preemptive | Planned |
+| FCFS | Non-Preemptive | Executes processes in order of arrival time. |
+| SJF | Non-Preemptive | Selects the arrived process with the shortest burst time. |
+| SRTF | Preemptive | Executes the process with the shortest remaining time. |
+| Priority | Non-Preemptive | Selects the arrived process with the highest priority. |
+| Round Robin | Preemptive | Allocates CPU time using a configurable time quantum. |
 
-*Implementation statuses will be updated as development progresses.*
+**Priority convention:** A smaller priority number represents a higher priority. For example, priority 1 is higher than priority 3.
 
-## Planned Features
+## Technologies Used
 
-- Add and manage processes.
-- Enter process ID, arrival time, burst time, and priority.
-- Select a CPU scheduling algorithm.
-- Simulate process execution.
-- Display a Gantt chart.
-- Calculate Completion Time (CT).
-- Calculate Turnaround Time (TAT).
-- Calculate Waiting Time (WT).
-- Calculate Response Time (RT).
-- Display average waiting and turnaround times.
-- Compare scheduling algorithm performance.
-- Provide a graphical interface using Java Swing.
+- Java
+- Java Swing
+- Java AWT
+- Object-Oriented Programming (OOP)
+- Git and GitHub
 
 ## Project Structure
 
 ```text
 CPU-Scheduling-Simulator/
+│
+├── .github/
+│   └── ISSUE_TEMPLATE/
+│       ├── bug_report.md
+│       └── feature_request.md
+│
 ├── src/
+│   ├── Main.java
+│   │
 │   ├── algorithms/
 │   │   ├── FCFS.java
 │   │   ├── SJF.java
 │   │   ├── SRTF.java
 │   │   ├── Priority.java
 │   │   └── RoundRobin.java
+│   │
 │   ├── engine/
 │   │   └── SchedulingEngine.java
+│   │
 │   ├── gui/
 │   │   ├── MainFrame.java
 │   │   ├── InputPanel.java
 │   │   ├── ResultsPanel.java
 │   │   └── GanttChartPanel.java
-│   ├── model/
-│   │   ├── Process.java
-│   │   ├── SchedulingResult.java
-│   │   └── ExecutionSegment.java
-│   └── Main.java
+│   │
+│   └── model/
+│       ├── Process.java
+│       ├── SchedulingResult.java
+│       └── ExecutionSegment.java
+│
 ├── test/
+│   ├── ExecutionSegmentTest.java
+│   ├── FCFSTest.java
+│   ├── SJFTest.java
+│   ├── SRTFTest.java
+│   ├── PriorityTest.java
+│   ├── RoundRobinTest.java
+│   └── SchedulingEngineTest.java
+│
 ├── .gitignore
 └── README.md
 ```
-
-*Note: Some files and directories represent the planned project structure and will be added during development.*
 
 ## Getting Started
 
 ### Prerequisites
 
-- Java Development Kit (JDK 17 or later recommended).
-- Visual Studio Code or another Java IDE.
+- Java Development Kit (JDK) 17 or later.
+- Visual Studio Code or another Java-compatible IDE.
 - Git (optional, for cloning the repository).
 
 ### Clone the Repository
 
 ```bash
 git clone https://github.com/tanveer3351/CPU-Scheduling-Simulator.git
+```
+
+Navigate to the project directory:
+
+```bash
 cd CPU-Scheduling-Simulator
 ```
 
-### Compile and Run
+### Compile the Project
 
-The current FCFS implementation can be compiled using:
+Run the following command from the project root directory:
 
-```powershell
-javac -d out src/model/Process.java src/model/SchedulingResult.java src/algorithms/FCFS.java src/Main.java
+```bash
+javac -d out src/model/*.java src/algorithms/*.java src/engine/*.java src/gui/*.java
 ```
 
-Run the application:
+### Run the Application
 
-```powershell
-java -cp out Main
+Launch the graphical interface using:
+
+```bash
+java -cp out gui.MainFrame
 ```
 
-*These commands run the current console-based FCFS implementation. GUI execution instructions will be added when the Swing interface is completed.*
+## How to Use
+
+1. Launch the application.
+2. Enter the Process ID, Arrival Time, Burst Time, and Priority.
+3. Click **Add Process** to add a process to the table.
+4. Add more processes as needed.
+5. Select a scheduling algorithm from the dropdown menu.
+6. For Round Robin, enter the desired Time Quantum.
+7. Click **Run Scheduling**.
+8. View the scheduling results, average performance metrics, and Gantt Chart.
+9. Use the Edit and Delete buttons to modify individual processes.
 
 ## Scheduling Metrics
 
-| Metric | Formula | Description |
-|---|---|---|
-| Completion Time (CT) | End time of execution | Time when a process finishes |
-| Turnaround Time (TAT) | CT - AT | Total time from arrival to completion |
-| Waiting Time (WT) | TAT - BT | Total time spent waiting |
-| Response Time (RT) | First ST - AT | Time until the process first gets CPU access |
+The simulator calculates the following performance metrics:
 
-Where AT = Arrival Time, BT = Burst Time, and ST = Start Time.
-
-## Sample Input
-
-| Process | Arrival Time | Burst Time | Priority |
-|---|---:|---:|---:|
-| P1 | 0 | 5 | 1 |
-| P2 | 1 | 3 | 2 |
-| P3 | 2 | 8 | 3 |
-
-## Expected FCFS Output
-
-| Process | ST | CT | TAT | WT |
-|---|---:|---:|---:|---:|
-| P1 | 0 | 5 | 5 | 0 |
-| P2 | 5 | 8 | 7 | 4 |
-| P3 | 8 | 16 | 14 | 6 |
-
-**Average Waiting Time:** 3.33
-
-**Average Turnaround Time:** 8.67
-
-## Team Contributions
-
-| Team Member | Responsibility |
+| Metric | Formula |
 |---|---|
-| Tanveer Ali | Project coordination, FCFS, integration and overall development |
-| Team Member 2 | SJF implementation |
-| Team Member 3 | SRTF implementation |
+| Completion Time (CT) | Time at which a process finishes execution |
+| Turnaround Time (TAT) | Completion Time − Arrival Time |
+| Waiting Time (WT) | Turnaround Time − Burst Time |
+| Response Time (RT) | First Start Time − Arrival Time |
 
-*Update team member names and responsibilities as tasks are finalized.*
+Average metrics are calculated by dividing the sum of the corresponding process values by the total number of processes.
 
-## Future Improvements
+## Learning Objectives
 
-- Interactive Gantt chart visualization.
-- Step-by-step process execution.
-- Algorithm performance comparison charts.
-- CPU utilization and throughput calculations.
-- Improved graphical interface.
-- Additional test cases and validation.
+This project provides practical experience with:
 
-## Learning Outcomes
-
-- Operating System process management.
-- CPU scheduling techniques.
+- CPU scheduling concepts in Operating Systems.
 - Preemptive and non-preemptive scheduling.
-- Java object-oriented programming.
-- Data structures and algorithms.
-- GUI development using Java Swing.
-- Git and GitHub collaboration.
+- Java Object-Oriented Programming.
+- Collections and data structures.
+- Queue-based process scheduling.
+- Java Swing GUI development.
+- Modular software design.
+- Git and GitHub version control.
+
+## Future Enhancements
+
+- Add more CPU scheduling algorithms.
+- Improve visualization and reporting.
+- Add process execution statistics and comparisons.
+- Export scheduling results to a file.
+
+## Team
+
+**Tanveer Ali (Lead)**
+**Muhammad Waleed**
+**Faraz Hussain**
+
+GitHub: [tanveer3351](https://github.com/tanveer3351)
 
 ## License
 
-This project is developed for educational purposes as part of an Operating Systems academic project.
+This project is developed for educational purposes.

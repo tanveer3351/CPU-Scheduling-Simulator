@@ -1,4 +1,3 @@
-
 package gui;
 
 import engine.SchedulingEngine;
@@ -8,10 +7,11 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import model.ExecutionSegment;
 import model.Process;
 import model.SchedulingResult;
-import model.ExecutionSegment;
 
 public class MainFrame extends JFrame {
 
@@ -49,6 +49,12 @@ public class MainFrame extends JFrame {
         inputPanel = new InputPanel();
         resultsPanel = new ResultsPanel();
         ganttChartPanel = new GanttChartPanel();
+
+        // Connect Clear All Processes button with output panels
+        inputPanel.setClearAllAction(() -> {
+            resultsPanel.clearResults();
+            ganttChartPanel.clearChart();
+        });
 
         // Apply modern styling
         inputPanel.setBackground(WHITE_COLOR);
@@ -161,11 +167,11 @@ public class MainFrame extends JFrame {
 
     private void updateQuantumField() {
 
-        String selectedAlgorithm =
-                algorithmSelector.getSelectedItem().toString();
+        String selectedAlgorithm
+                = algorithmSelector.getSelectedItem().toString();
 
-        boolean isRoundRobin =
-                selectedAlgorithm.equals("ROUND ROBIN");
+        boolean isRoundRobin
+                = selectedAlgorithm.equals("ROUND ROBIN");
 
         timeQuantumField.setEnabled(isRoundRobin);
 
@@ -182,29 +188,26 @@ public class MainFrame extends JFrame {
 
         try {
 
+            // Get the table model once
+            DefaultTableModel tableModel = inputPanel.getTableModel();
+
             // Read processes from input table
             List<Process> processes = new ArrayList<>();
 
-            for (int row = 0;
-                    row < inputPanel.getTableModel().getRowCount();
-                    row++) {
+            for (int row = 0; row < tableModel.getRowCount(); row++) {
 
-                String processId = inputPanel.getTableModel()
-                        .getValueAt(row, 0).toString();
+                String processId = tableModel.getValueAt(row, 0).toString();
 
                 int arrivalTime = Integer.parseInt(
-                        inputPanel.getTableModel()
-                                .getValueAt(row, 1).toString()
+                        tableModel.getValueAt(row, 1).toString()
                 );
 
                 int burstTime = Integer.parseInt(
-                        inputPanel.getTableModel()
-                                .getValueAt(row, 2).toString()
+                        tableModel.getValueAt(row, 2).toString()
                 );
 
                 int priority = Integer.parseInt(
-                        inputPanel.getTableModel()
-                                .getValueAt(row, 3).toString()
+                        tableModel.getValueAt(row, 3).toString()
                 );
 
                 processes.add(new Process(
@@ -216,8 +219,8 @@ public class MainFrame extends JFrame {
             }
 
             // Get selected algorithm
-            String selectedAlgorithm =
-                    algorithmSelector.getSelectedItem().toString();
+            String selectedAlgorithm
+                    = algorithmSelector.getSelectedItem().toString();
 
             // Read quantum only for Round Robin
             int timeQuantum = 1;
@@ -236,16 +239,16 @@ public class MainFrame extends JFrame {
             }
 
             // Execute scheduling
-            List<SchedulingResult> results =
-                    schedulingEngine.schedule(
+            List<SchedulingResult> results
+                    = schedulingEngine.schedule(
                             selectedAlgorithm,
                             processes,
                             timeQuantum
                     );
 
             // Get execution segments
-            List<ExecutionSegment> segments =
-                    schedulingEngine.getExecutionSegments();
+            List<ExecutionSegment> segments
+                    = schedulingEngine.getExecutionSegments();
 
             // Display updated results
             resultsPanel.displayResults(results);
