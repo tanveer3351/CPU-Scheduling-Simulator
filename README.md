@@ -217,7 +217,7 @@ This project provides practical experience with:
 
 **Faraz Hussain**
 
-GitHub: [Tanverr Ali](https://github.com/tanveer3351)
+GitHub: [Tanveer Ali](https://github.com/tanveer3351)
 
 ## Project Purpose
 
