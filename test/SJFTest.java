@@ -20,37 +20,35 @@ public class SJFTest {
 
         List<SchedulingResult> results = sjf.schedule(processes);
 
-        System.out.println("SJF Scheduling Results");
-        System.out.println("--------------------------------");
+        // Verify number of results
+        assert results.size() == 2 : "Incorrect number of results";
 
-        double totalWaitingTime = 0;
-        double totalTurnaroundTime = 0;
+        // Verify P1
+        SchedulingResult p1 = results.get(0);
 
-        for (SchedulingResult result : results) {
+        assert p1.getProcessId().equals("P1") : "Incorrect P1 ID";
+        assert p1.getCompletionTime() == 5 : "Incorrect P1 completion time";
+        assert p1.getTurnaroundTime() == 3 : "Incorrect P1 turnaround time";
+        assert p1.getWaitingTime() == 0 : "Incorrect P1 waiting time";
 
-            System.out.println(
-                    result.getProcessId()
-                    + " | AT: " + result.getArrivalTime()
-                    + " | BT: " + result.getBurstTime()
-                    + " | CT: " + result.getCompletionTime()
-                    + " | WT: " + result.getWaitingTime()
-                    + " | TAT: " + result.getTurnaroundTime()
-            );
+        // Verify P2
+        SchedulingResult p2 = results.get(1);
 
-            totalWaitingTime += result.getWaitingTime();
-            totalTurnaroundTime += result.getTurnaroundTime();
-        }
+        assert p2.getProcessId().equals("P2") : "Incorrect P2 ID";
+        assert p2.getCompletionTime() == 10 : "Incorrect P2 completion time";
+        assert p2.getTurnaroundTime() == 2 : "Incorrect P2 turnaround time";
+        assert p2.getWaitingTime() == 0 : "Incorrect P2 waiting time";
 
-        System.out.println("\nExecution Segments:");
+        // Verify execution segments
+        List<ExecutionSegment> segments = sjf.getExecutionSegments();
 
-        for (ExecutionSegment segment : sjf.getExecutionSegments()) {
-            System.out.println(segment);
-        }
+        assert segments.size() == 4 : "Incorrect number of execution segments";
 
-        System.out.println("\nAverage Waiting Time: "
-                + totalWaitingTime / results.size());
+        assert segments.get(0).getProcessId().equals("IDLE");
+        assert segments.get(1).getProcessId().equals("P1");
+        assert segments.get(2).getProcessId().equals("IDLE");
+        assert segments.get(3).getProcessId().equals("P2");
 
-        System.out.println("Average Turnaround Time: "
-                + totalTurnaroundTime / results.size());
+        System.out.println("SJF Test Passed!");
     }
 }

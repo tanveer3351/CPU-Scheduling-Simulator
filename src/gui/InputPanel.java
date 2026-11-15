@@ -21,7 +21,7 @@ public class InputPanel extends JPanel {
 
     private final DefaultTableModel tableModel;
     private final JTable processTable;
-    private Runnable clearAllAction;
+    private Runnable processChangeAction;
 
     public InputPanel() {
 
@@ -132,6 +132,10 @@ public class InputPanel extends JPanel {
                 processId, arrivalTime, burstTime, priority, "Actions"
             });
 
+            if (processChangeAction != null) {
+                processChangeAction.run();
+            }
+
             clearInputs();
 
         } catch (NumberFormatException exception) {
@@ -162,6 +166,12 @@ public class InputPanel extends JPanel {
         if (processId.isEmpty()) {
             throw new IllegalArgumentException(
                     "Process ID cannot be empty."
+            );
+        }
+
+        if (processId.equalsIgnoreCase("IDLE")) {
+            throw new IllegalArgumentException(
+                    "Process ID 'IDLE' is reserved for CPU idle time. Please use another ID."
             );
         }
 
@@ -268,6 +278,10 @@ public class InputPanel extends JPanel {
             tableModel.setValueAt(burstTime, row, BURST_TIME_COLUMN);
             tableModel.setValueAt(priority, row, PRIORITY_COLUMN);
 
+            if (processChangeAction != null) {
+                processChangeAction.run();
+            }
+
         } catch (NumberFormatException exception) {
 
             JOptionPane.showMessageDialog(
@@ -323,14 +337,14 @@ public class InputPanel extends JPanel {
         clearInputs();
 
         // Notify MainFrame to clear previous results
-        if (clearAllAction != null) {
-            clearAllAction.run();
+        if (processChangeAction != null) {
+            processChangeAction.run();
         }
     }
 
 // Set the action that runs after clearing all processes
-    public void setClearAllAction(Runnable action) {
-        this.clearAllAction = action;
+    public void setProcessChangeAction(Runnable action) {
+        this.processChangeAction = action;
     }
 
     public DefaultTableModel getTableModel() {
@@ -404,6 +418,10 @@ public class InputPanel extends JPanel {
                         && selectedRow < tableModel.getRowCount()) {
 
                     tableModel.removeRow(selectedRow);
+
+                    if (processChangeAction != null) {
+                        processChangeAction.run();
+                    }
                 }
             });
         }

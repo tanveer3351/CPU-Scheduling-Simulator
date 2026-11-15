@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,23 +20,35 @@ public class FCFSTest {
 
         List<SchedulingResult> results = fcfs.schedule(processes);
 
-        System.out.println("FCFS Scheduling Results");
-        System.out.println("-----------------------");
+        // Verify number of results
+        assert results.size() == 2 : "Incorrect number of results";
 
-        for (SchedulingResult result : results) {
-            System.out.println(
-                result.getProcessId()
-                + " | CT: " + result.getCompletionTime()
-                + " | WT: " + result.getWaitingTime()
-                + " | TAT: " + result.getTurnaroundTime()
-            );
-        }
+        // Verify P1
+        SchedulingResult p1 = results.get(0);
 
-        System.out.println("\nExecution Segments");
-        System.out.println("------------------");
+        assert p1.getProcessId().equals("P1") : "Incorrect P1 ID";
+        assert p1.getCompletionTime() == 5 : "Incorrect P1 completion time";
+        assert p1.getTurnaroundTime() == 3 : "Incorrect P1 turnaround time";
+        assert p1.getWaitingTime() == 0 : "Incorrect P1 waiting time";
 
-        for (ExecutionSegment segment : fcfs.getExecutionSegments()) {
-            System.out.println(segment);
-        }
+        // Verify P2
+        SchedulingResult p2 = results.get(1);
+
+        assert p2.getProcessId().equals("P2") : "Incorrect P2 ID";
+        assert p2.getCompletionTime() == 10 : "Incorrect P2 completion time";
+        assert p2.getTurnaroundTime() == 2 : "Incorrect P2 turnaround time";
+        assert p2.getWaitingTime() == 0 : "Incorrect P2 waiting time";
+
+        // Verify execution segments
+        List<ExecutionSegment> segments = fcfs.getExecutionSegments();
+
+        assert segments.size() == 4 : "Incorrect number of execution segments";
+
+        assert segments.get(0).getProcessId().equals("IDLE");
+        assert segments.get(1).getProcessId().equals("P1");
+        assert segments.get(2).getProcessId().equals("IDLE");
+        assert segments.get(3).getProcessId().equals("P2");
+
+        System.out.println("FCFS Test Passed!");
     }
 }

@@ -20,13 +20,13 @@ public class SJF {
         // Copy the original process list
         List<Process> pendingProcesses = new ArrayList<>(processes);
 
-        // Sort processes by arrival time
+        // Sort by arrival time, then process ID alphabetically
         pendingProcesses.sort(
                 Comparator.comparingInt(Process::getArrivalTime)
+                        .thenComparing(Process::getProcessId)
         );
 
         List<SchedulingResult> results = new ArrayList<>();
-
 
         int currentTime = 0;
 
@@ -41,7 +41,13 @@ public class SJF {
                 if (process.getArrivalTime() <= currentTime) {
 
                     if (selectedProcess == null
-                            || process.getBurstTime() < selectedProcess.getBurstTime()) {
+                            || process.getBurstTime() < selectedProcess.getBurstTime()
+                            || (process.getBurstTime() == selectedProcess.getBurstTime()
+                            && process.getArrivalTime() < selectedProcess.getArrivalTime())
+                            || (process.getBurstTime() == selectedProcess.getBurstTime()
+                            && process.getArrivalTime() == selectedProcess.getArrivalTime()
+                            && process.getProcessId().compareTo(
+                                    selectedProcess.getProcessId()) < 0)) {
 
                         selectedProcess = process;
                     }
@@ -104,6 +110,6 @@ public class SJF {
 
     // Return CPU execution segments
     public List<ExecutionSegment> getExecutionSegments() {
-    return new ArrayList<>(executionSegments);
+        return new ArrayList<>(executionSegments);
     }
 }

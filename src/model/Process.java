@@ -1,4 +1,5 @@
 package model;
+
 public class Process {
 
     // Process information
@@ -6,7 +7,6 @@ public class Process {
     private final int arrivalTime;
     private final int burstTime;
     private final int priority;
-
 
     // Constructor
     public Process(String processId,
@@ -16,6 +16,12 @@ public class Process {
 
         if (processId == null || processId.trim().isEmpty()) {
             throw new IllegalArgumentException("Process ID cannot be empty");
+        }
+
+        if (processId.trim().equalsIgnoreCase("IDLE")) {
+            throw new IllegalArgumentException(
+                    "Process ID 'IDLE' is reserved for CPU idle time."
+            );
         }
 
         if (arrivalTime < 0) {

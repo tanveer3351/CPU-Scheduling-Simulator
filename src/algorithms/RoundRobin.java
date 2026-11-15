@@ -1,4 +1,3 @@
-
 package algorithms;
 
 import java.util.ArrayList;
@@ -13,8 +12,8 @@ import model.ExecutionSegment;
 
 public class RoundRobin {
 
-    private List<ExecutionSegment> executionSegments =
-            new ArrayList<>();
+    private List<ExecutionSegment> executionSegments
+            = new ArrayList<>();
 
     public List<SchedulingResult> schedule(
             List<Process> processes, int timeQuantum) {
@@ -27,11 +26,13 @@ public class RoundRobin {
             );
         }
 
-        List<Process> sortedProcesses =
-                new ArrayList<>(processes);
+        List<Process> sortedProcesses
+                = new ArrayList<>(processes);
 
+        // Sort by arrival time, then process ID alphabetically
         sortedProcesses.sort(
                 Comparator.comparingInt(Process::getArrivalTime)
+                        .thenComparing(Process::getProcessId)
         );
 
         List<SchedulingResult> results = new ArrayList<>();
@@ -58,8 +59,8 @@ public class RoundRobin {
 
             if (readyQueue.isEmpty()) {
 
-                int nextArrivalTime =
-                        sortedProcesses.get(nextProcessIndex)
+                int nextArrivalTime
+                        = sortedProcesses.get(nextProcessIndex)
                                 .getArrivalTime();
 
                 if (currentTime < nextArrivalTime) {
@@ -81,8 +82,8 @@ public class RoundRobin {
 
             int selectedIndex = readyQueue.poll();
 
-            Process selectedProcess =
-                    sortedProcesses.get(selectedIndex);
+            Process selectedProcess
+                    = sortedProcesses.get(selectedIndex);
 
             if (!hasStarted[selectedIndex]) {
                 firstStartTime[selectedIndex] = currentTime;

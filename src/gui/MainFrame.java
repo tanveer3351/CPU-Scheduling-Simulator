@@ -51,7 +51,7 @@ public class MainFrame extends JFrame {
         ganttChartPanel = new GanttChartPanel();
 
         // Connect Clear All Processes button with output panels
-        inputPanel.setClearAllAction(() -> {
+        inputPanel.setProcessChangeAction(() -> {
             resultsPanel.clearResults();
             ganttChartPanel.clearChart();
         });

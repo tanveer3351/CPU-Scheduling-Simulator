@@ -13,59 +13,60 @@ public class RoundRobinTest {
 
         List<Process> processes = new ArrayList<>();
 
-        // processes.add(new Process("P1", 0, 5, 3));
-        // processes.add(new Process("P2", 1, 4, 1));
-        // processes.add(new Process("P3", 2, 2, 2));
-        // int timeQuantum = 2;
         processes.add(new Process("P1", 0, 5, 2));
-        // processes.add(new Process("P2", 8, 2, 1));
+        processes.add(new Process("P2", 1, 4, 1));
+        processes.add(new Process("P3", 2, 2, 2));
 
         int timeQuantum = 2;
 
         RoundRobin roundRobin = new RoundRobin();
 
-        List<SchedulingResult> results
-                = roundRobin.schedule(processes, timeQuantum);
+        List<SchedulingResult> results =
+                roundRobin.schedule(processes, timeQuantum);
 
-        double totalWaitingTime = 0;
-        double totalTurnaroundTime = 0;
-        double totalResponseTime = 0;
+        // Verify number of results
+        assert results.size() == 3 : "Incorrect number of results";
 
-        System.out.println("Round Robin Scheduling Results");
-        System.out.println("--------------------------------");
+        // Verify P1
+        SchedulingResult p1 = results.get(0);
 
-        for (SchedulingResult result : results) {
+        assert p1.getProcessId().equals("P1");
+        assert p1.getCompletionTime() == 11 : "Incorrect P1 CT";
+        assert p1.getTurnaroundTime() == 11 : "Incorrect P1 TAT";
+        assert p1.getWaitingTime() == 6 : "Incorrect P1 WT";
+        assert p1.getResponseTime() == 0 : "Incorrect P1 RT";
 
-            System.out.println(
-                    result.getProcessId()
-                    + " | AT: " + result.getArrivalTime()
-                    + " | BT: " + result.getBurstTime()
-                    + " | CT: " + result.getCompletionTime()
-                    + " | WT: " + result.getWaitingTime()
-                    + " | TAT: " + result.getTurnaroundTime()
-                    + " | RT: " + result.getResponseTime()
-            );
+        // Verify P2
+        SchedulingResult p2 = results.get(1);
 
-            totalWaitingTime += result.getWaitingTime();
-            totalTurnaroundTime += result.getTurnaroundTime();
-            totalResponseTime += result.getResponseTime();
-        }
+        assert p2.getProcessId().equals("P2");
+        assert p2.getCompletionTime() == 10 : "Incorrect P2 CT";
+        assert p2.getTurnaroundTime() == 9 : "Incorrect P2 TAT";
+        assert p2.getWaitingTime() == 5 : "Incorrect P2 WT";
+        assert p2.getResponseTime() == 1 : "Incorrect P2 RT";
 
-        System.out.println("\nExecution Segments:");
+        // Verify P3
+        SchedulingResult p3 = results.get(2);
 
-        for (ExecutionSegment segment
-                : roundRobin.getExecutionSegments()) {
+        assert p3.getProcessId().equals("P3");
+        assert p3.getCompletionTime() == 6 : "Incorrect P3 CT";
+        assert p3.getTurnaroundTime() == 4 : "Incorrect P3 TAT";
+        assert p3.getWaitingTime() == 2 : "Incorrect P3 WT";
+        assert p3.getResponseTime() == 2 : "Incorrect P3 RT";
 
-            System.out.println(segment);
-        }
+        // Verify execution order
+        List<ExecutionSegment> segments =
+                roundRobin.getExecutionSegments();
 
-        System.out.println("\nAverage Waiting Time: "
-                + totalWaitingTime / results.size());
+        assert segments.size() == 6 : "Incorrect number of execution segments";
 
-        System.out.println("Average Turnaround Time: "
-                + totalTurnaroundTime / results.size());
+        assert segments.get(0).getProcessId().equals("P1");
+        assert segments.get(1).getProcessId().equals("P2");
+        assert segments.get(2).getProcessId().equals("P3");
+        assert segments.get(3).getProcessId().equals("P1");
+        assert segments.get(4).getProcessId().equals("P2");
+        assert segments.get(5).getProcessId().equals("P1");
 
-        System.out.println("Average Response Time: "
-                + totalResponseTime / results.size());
+        System.out.println("Round Robin Test Passed!");
     }
 }

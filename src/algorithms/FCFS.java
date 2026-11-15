@@ -19,9 +19,10 @@ public class FCFS {
         // Create a copy so the original list is not modified
         List<Process> sortedProcesses = new ArrayList<>(processes);
 
-        // Sort processes according to arrival time
+        // Sort by arrival time, then process ID alphabetically
         sortedProcesses.sort(
-            Comparator.comparingInt(Process::getArrivalTime)
+                Comparator.comparingInt(Process::getArrivalTime)
+                        .thenComparing(Process::getProcessId)
         );
 
         List<SchedulingResult> results = new ArrayList<>();
@@ -34,18 +35,18 @@ public class FCFS {
 
             // Calculate process start time
             int startTime = Math.max(
-                currentTime,
-                process.getArrivalTime()
+                    currentTime,
+                    process.getArrivalTime()
             );
 
             // Record CPU idle time if necessary
             if (startTime > currentTime) {
                 executionSegments.add(
-                    new ExecutionSegment(
-                        "IDLE",
-                        currentTime,
-                        startTime
-                    )
+                        new ExecutionSegment(
+                                "IDLE",
+                                currentTime,
+                                startTime
+                        )
                 );
             }
 
@@ -54,22 +55,22 @@ public class FCFS {
 
             // Store scheduling results
             SchedulingResult result = new SchedulingResult(
-                process.getProcessId(),
-                process.getArrivalTime(),
-                process.getBurstTime(),
-                startTime,
-                completionTime
+                    process.getProcessId(),
+                    process.getArrivalTime(),
+                    process.getBurstTime(),
+                    startTime,
+                    completionTime
             );
 
             results.add(result);
 
             // Record process execution
             executionSegments.add(
-                new ExecutionSegment(
-                    process.getProcessId(),
-                    startTime,
-                    completionTime
-                )
+                    new ExecutionSegment(
+                            process.getProcessId(),
+                            startTime,
+                            completionTime
+                    )
             );
 
             // Update CPU time

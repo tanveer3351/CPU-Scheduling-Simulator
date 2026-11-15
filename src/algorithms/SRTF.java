@@ -9,8 +9,8 @@ import model.ExecutionSegment;
 
 public class SRTF {
 
-    private List<ExecutionSegment> executionSegments =
-            new ArrayList<>();
+    private List<ExecutionSegment> executionSegments
+            = new ArrayList<>();
 
     public List<SchedulingResult> schedule(List<Process> processes) {
 
@@ -46,8 +46,15 @@ public class SRTF {
                         && remainingTime[i] > 0) {
 
                     if (selectedProcess == -1
-                            || remainingTime[i] <
-                            remainingTime[selectedProcess]) {
+                            || remainingTime[i] < remainingTime[selectedProcess]
+                            || (remainingTime[i] == remainingTime[selectedProcess]
+                            && process.getArrivalTime()
+                            < processList.get(selectedProcess).getArrivalTime())
+                            || (remainingTime[i] == remainingTime[selectedProcess]
+                            && process.getArrivalTime()
+                            == processList.get(selectedProcess).getArrivalTime()
+                            && process.getProcessId().compareTo(
+                                    processList.get(selectedProcess).getProcessId()) < 0)) {
 
                         selectedProcess = i;
                     }
@@ -57,35 +64,31 @@ public class SRTF {
             // Handle CPU idle time
             if (selectedProcess == -1) {
 
-                if (!executionSegments.isEmpty()
-                        && executionSegments.get(
-                                executionSegments.size() - 1)
-                                .getProcessId().equals("IDLE")) {
+                int nextArrivalTime = Integer.MAX_VALUE;
 
-                    ExecutionSegment lastSegment =
-                            executionSegments.remove(
-                                    executionSegments.size() - 1);
+                // Find the next arrival time of an unfinished process
+                for (int i = 0; i < processCount; i++) {
 
-                    executionSegments.add(
-                            new ExecutionSegment(
-                                    "IDLE",
-                                    lastSegment.getStartTime(),
-                                    currentTime + 1
-                            )
-                    );
+                    if (remainingTime[i] > 0
+                            && processList.get(i).getArrivalTime() > currentTime
+                            && processList.get(i).getArrivalTime() < nextArrivalTime) {
 
-                } else {
-
-                    executionSegments.add(
-                            new ExecutionSegment(
-                                    "IDLE",
-                                    currentTime,
-                                    currentTime + 1
-                            )
-                    );
+                        nextArrivalTime = processList.get(i).getArrivalTime();
+                    }
                 }
 
-                currentTime++;
+                // Record the complete idle period
+                executionSegments.add(
+                        new ExecutionSegment(
+                                "IDLE",
+                                currentTime,
+                                nextArrivalTime
+                        )
+                );
+
+                // Jump directly to the next process arrival
+                currentTime = nextArrivalTime;
+
                 continue;
             }
 
@@ -101,8 +104,8 @@ public class SRTF {
             // Record CPU execution
             if (!executionSegments.isEmpty()) {
 
-                ExecutionSegment lastSegment =
-                        executionSegments.get(
+                ExecutionSegment lastSegment
+                        = executionSegments.get(
                                 executionSegments.size() - 1);
 
                 if (lastSegment.getProcessId().equals(

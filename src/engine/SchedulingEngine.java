@@ -2,6 +2,9 @@ package engine;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Locale;
 
 import algorithms.FCFS;
 import algorithms.SJF;
@@ -23,6 +26,34 @@ public class SchedulingEngine {
         executionSegments = new java.util.ArrayList<>();
     }
 
+    private void validateProcesses(List<Process> processes) {
+
+        Set<String> processIds = new HashSet<>();
+
+        for (Process process : processes) {
+
+            if (process == null) {
+                throw new IllegalArgumentException(
+                        "Process list cannot contain null entries."
+                );
+            }
+
+            String processId = process.getProcessId().trim();
+
+            if (processId.equalsIgnoreCase("IDLE")) {
+                throw new IllegalArgumentException(
+                        "Process ID 'IDLE' is reserved for CPU idle time."
+                );
+            }
+
+            if (!processIds.add(processId.toLowerCase(Locale.ROOT))) {
+                throw new IllegalArgumentException(
+                        "Duplicate process ID found: " + processId
+                );
+            }
+        }
+    }
+
     public List<SchedulingResult> schedule(
             String algorithmName,
             List<Process> processes,
@@ -34,6 +65,8 @@ public class SchedulingEngine {
                     "Process list cannot be null or empty."
             );
         }
+
+        validateProcesses(processes);
 
         // Clear previous scheduling data
         schedulingResults.clear();

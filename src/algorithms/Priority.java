@@ -10,8 +10,8 @@ import model.ExecutionSegment;
 
 public class Priority {
 
-    private List<ExecutionSegment> executionSegments =
-            new ArrayList<>();
+    private List<ExecutionSegment> executionSegments
+            = new ArrayList<>();
 
     public List<SchedulingResult> schedule(List<Process> processes) {
 
@@ -40,8 +40,15 @@ public class Priority {
                 if (process.getArrivalTime() <= currentTime) {
 
                     if (selectedProcess == null
-                            || process.getPriority()
-                            < selectedProcess.getPriority()) {
+                            || process.getPriority() < selectedProcess.getPriority()
+                            || (process.getPriority() == selectedProcess.getPriority()
+                            && process.getArrivalTime()
+                            < selectedProcess.getArrivalTime())
+                            || (process.getPriority() == selectedProcess.getPriority()
+                            && process.getArrivalTime()
+                            == selectedProcess.getArrivalTime()
+                            && process.getProcessId().compareTo(
+                                    selectedProcess.getProcessId()) < 0)) {
 
                         selectedProcess = process;
                     }
@@ -51,8 +58,8 @@ public class Priority {
             // Handle CPU idle time
             if (selectedProcess == null) {
 
-                int nextArrivalTime =
-                        pendingProcesses.get(0).getArrivalTime();
+                int nextArrivalTime
+                        = pendingProcesses.get(0).getArrivalTime();
 
                 executionSegments.add(
                         new ExecutionSegment(
@@ -69,8 +76,8 @@ public class Priority {
             // Calculate execution times
             int startTime = currentTime;
 
-            int completionTime =
-                    startTime + selectedProcess.getBurstTime();
+            int completionTime
+                    = startTime + selectedProcess.getBurstTime();
 
             // Store scheduling result
             SchedulingResult result = new SchedulingResult(
